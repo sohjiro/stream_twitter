@@ -12,8 +12,7 @@ defmodule StreamTwitter.Streamer do
 
   def handle_cast({:start, pid}, stream) do
     for tweet <- stream do
-      send(pid, {:incoming, tweet.text})
-      # GenServer.call(pid, {:incoming, tweet.text})
+      GenServer.cast(pid, {:incoming, tweet.text})
     end
   end
 

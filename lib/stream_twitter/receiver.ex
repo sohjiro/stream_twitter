@@ -1,21 +1,26 @@
 defmodule StreamTwitter.Receiver do
+  use GenServer
 
-  def start(counter, tweets) do
-    receive do
-      {:start} ->
-        IO.puts "starting gen server"
-        {:ok, pid} = StreamTwitter.Streamer.start_link("FelizDomingo")
-        StreamTwitter.Streamer.start_stream(pid, self)
-        start(counter, tweets)
-      {:incoming, tweet} -> start(counter + 1, [tweet | tweets])
-      {:tweets, pid} ->
-        # GenServer.call(pid, tweets)
-        send(pid, tweets)
-        start(counter + 1, tweets)
-      {:count} ->
-        IO.puts("counts: #{counter}")
-        start(counter, tweets)
-    end
+  def start_link(text) do
+    GenServer.start_link(__MODULE__, text)
+  end
+
+  def init(text) do
+    {:ok, pid} = StreamTwitter.Streamer.start_link(text)
+    StreamTwitter.Streamer.start_stream(pid, self)
+    {:ok, []}
+  end
+
+  def handle_call(:count, _from, tweets) do
+    {:reply, length(tweets), tweets}
+  end
+
+  def handle_call(:tweets, _from, tweets) do
+    {:reply, tweets, tweets}
+  end
+
+  def handle_cast({:incoming, tweet}, tweets) do
+    {:noreply, [tweet | tweets]}
   end
 
 end
