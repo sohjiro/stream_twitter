@@ -11,6 +11,9 @@ defmodule StreamTwitter.Receiver do
     {:ok, []}
   end
 
+  def total(pid), do: GenServer.call(pid, :count)
+  def tweets(pid), do: GenServer.call(pid, :tweets)
+
   def handle_call(:count, _from, tweets) do
     {:reply, length(tweets), tweets}
   end
