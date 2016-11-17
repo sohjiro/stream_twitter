@@ -2,11 +2,11 @@ defmodule StreamTwitter.Receiver do
   use GenServer
 
   def start_link(name, text) do
-    GenServer.start_link(__MODULE__, text, name: name)
+    GenServer.start_link(__MODULE__, {name, text}, name: name)
   end
 
-  def init(text) do
-    {:ok, pid} = StreamTwitter.Streamer.start_link(text)
+  def init({name, text}) do
+    {:ok, pid} = StreamTwitter.Streamer.start_link(name, text)
     StreamTwitter.Streamer.start_stream(pid, self)
     {:ok, []}
   end

@@ -1,7 +1,8 @@
 defmodule StreamTwitter.Streamer do
   use GenServer
 
-  def start_link(text) do
+  def start_link(name, text) do
+    IO.puts "name : #{inspect name} with text: #{text}"
     stream = ExTwitter.stream_filter(track: text)
     GenServer.start_link(__MODULE__, stream)
   end
