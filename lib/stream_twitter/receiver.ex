@@ -1,8 +1,8 @@
 defmodule StreamTwitter.Receiver do
   use GenServer
 
-  def start_link(text) do
-    GenServer.start_link(__MODULE__, text)
+  def start_link(name, text) do
+    GenServer.start_link(__MODULE__, text, name: name)
   end
 
   def init(text) do
@@ -11,8 +11,8 @@ defmodule StreamTwitter.Receiver do
     {:ok, []}
   end
 
-  def total(pid), do: GenServer.call(pid, :count)
-  def tweets(pid), do: GenServer.call(pid, :tweets)
+  def total(name), do: GenServer.call(name, :count)
+  def tweets(name), do: GenServer.call(name, :tweets)
 
   def handle_call(:count, _from, tweets) do
     {:reply, length(tweets), tweets}
