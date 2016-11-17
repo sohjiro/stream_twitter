@@ -14,7 +14,7 @@ defmodule StreamTwitter.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :extwitter]]
+    [applications: [:logger, :extwitter], mod: {StreamTwitter, []}
   end
 
   # Dependencies can be Hex packages:
