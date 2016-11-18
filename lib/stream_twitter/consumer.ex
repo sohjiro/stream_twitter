@@ -1,4 +1,4 @@
-defmodule StreamTwitter.Receiver do
+defmodule StreamTwitter.Consumer do
   use GenServer
 
   def start_link(name, text) do

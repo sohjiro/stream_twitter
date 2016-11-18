@@ -5,7 +5,7 @@ defmodule StreamTwitter do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(StreamTwitter.Receiver, [])
+      worker(StreamTwitter.Consumer, [])
     ]
 
     opts = [strategy: :simple_one_for_one, name: StreamTwitter.Supervisor]
@@ -13,7 +13,7 @@ defmodule StreamTwitter do
   end
 
   def search(name, text), do: Supervisor.start_child(StreamTwitter.Supervisor, [name, text])
-  def total(name), do: StreamTwitter.Receiver.total(name)
-  def tweets(name), do: StreamTwitter.Receiver.tweets(name)
+  def total(name), do: StreamTwitter.Consumer.total(name)
+  def tweets(name), do: StreamTwitter.Consumer.tweets(name)
 
 end
