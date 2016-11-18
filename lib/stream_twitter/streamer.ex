@@ -2,7 +2,6 @@ defmodule StreamTwitter.Streamer do
   use GenServer
 
   def start_link(name, text) do
-    IO.puts "name : #{inspect name} with text: #{text}"
     GenServer.start_link(__MODULE__, {name, text})
   end
 
