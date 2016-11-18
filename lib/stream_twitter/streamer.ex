@@ -17,12 +17,11 @@ defmodule StreamTwitter.Streamer do
   end
 
   def handle_cast({:start, _pid}, {stream, name}) do
-    for tweet <- stream do
-      :ets.insert(name, {"tweets", tweet.text})
-    end
+    for tweet <- stream, do: insert_to(name, tweet.text)
     {:noreply, {stream, name}}
   end
 
   defp create_ets(name), do: :ets.new(name, [:bag, :protected, :named_table])
+  defp insert_to(name, text), do: :ets.insert(name, {"tweets", text})
 
 end
