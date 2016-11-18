@@ -8,20 +8,15 @@ defmodule StreamTwitter.Streamer do
 
   def init({name, text}) do
     stream = ExTwitter.stream_filter(track: text)
-    create_ets(name)
+    StreamTwitter.DataAccess.init(name)
     {:ok, {stream, name}}
   end
 
-  def start_stream(pid, response_to) do
-    GenServer.cast(pid, {:start, response_to})
-  end
+  def start_stream(pid), do: GenServer.cast(pid, :start)
 
-  def handle_cast({:start, _pid}, {stream, name}) do
-    for tweet <- stream, do: insert_to(name, tweet.text)
+  def handle_cast(:start, {stream, name}) do
+    for tweet <- stream, do: StreamTwitter.DataAccess.create(name, {tweet.text, tweet.created_at})
     {:noreply, {stream, name}}
   end
-
-  defp create_ets(name), do: :ets.new(name, [:bag, :protected, :named_table])
-  defp insert_to(name, text), do: :ets.insert(name, {"tweets", text})
 
 end
