@@ -9,10 +9,7 @@ defmodule StreamTwitter.Consumer do
   def count(name), do: GenServer.call(__MODULE__, {:count, name})
 
   def handle_cast({:search, text}, state) do
-    Task.Supervisor.start_child(StreamTwitter.Streamer.Supervisor,
-                                StreamTwitter.Pool.Streamer,
-                                :stream,
-                                [text])
+    IO.inspect Supervisor.start_child(StreamTwitter.Pool.Supervisor, [text])
     {:noreply, state}
   end
 

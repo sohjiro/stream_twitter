@@ -1,8 +1,16 @@
 defmodule StreamTwitter.Pool.Streamer do
+  use GenServer
 
-  def stream(text) do
-    stream = ExTwitter.stream_filter(track: text)
-    for tweet <- stream, do: StreamTwitter.DataAccess.create(text, {tweet.text, tweet.created_at})
+  def start_link(text) do
+    GenServer.start_link(__MODULE__, text)
+  end
+
+  def init(text) do
+    spawn_monitor(fn ->
+      stream = ExTwitter.stream_filter(track: text)
+      for tweet <- stream, do: StreamTwitter.DataAccess.create(text, {tweet.text, tweet.created_at})
+    end)
+    {:ok, text}
   end
 
 end

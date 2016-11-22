@@ -7,7 +7,7 @@ defmodule StreamTwitter do
     children = [
       worker(StreamTwitter.Consumer, []),
       worker(StreamTwitter.DataAccess, []),
-      supervisor(Task.Supervisor, [[name: StreamTwitter.Streamer.Supervisor]])
+      supervisor(StreamTwitter.Pool.Supervisor, [])
     ]
 
     opts = [strategy: :one_for_one, name: StreamTwitter.Supervisor]
