@@ -6,15 +6,15 @@ defmodule StreamTwitter.DataAccess do
   end
 
   def init(_args) do
-    {:ok, :ets.new(__MODULE__, [:bag, :protected])}
+    {:ok, IO.inspect(:ets.new(__MODULE__, [:bag, :protected]))}
   end
 
   def create(table_name, data) do
     GenServer.cast(__MODULE__, {:insert, table_name, data})
   end
 
-  def retrieve(table_name) do
-    GenServer.cast(__MODULE__, {:retrieve, table_name})
+  def count(table_name) do
+    GenServer.call(__MODULE__, {:count, table_name})
   end
 
   def handle_cast({:insert, table_name, data}, db_name) do
@@ -22,8 +22,9 @@ defmodule StreamTwitter.DataAccess do
     {:noreply, db_name}
   end
 
-  def handle_call({:retrieve, table_name}, db_name) do
-    {:reply, :ets.lookup(db_name, table_name), db_name}
+  def handle_call({:count, table_name}, _from, db_name) do
+    match_spec = [{{:"$1", :_}, [{:"=:=", {:const, table_name}, :"$1"}], [true]}]
+    {:reply, :ets.select_count(db_name, match_spec), db_name}
   end
 
 end

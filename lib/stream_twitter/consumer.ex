@@ -11,7 +11,7 @@ defmodule StreamTwitter.Consumer do
     Task.Supervisor.start_child(StreamTwitter.TaskSupervisor,
                                 StreamTwitter.Pool.Streamer,
                                 :stream,
-                                [name, text])
+                                [text])
     {:noreply, state}
   end
 
