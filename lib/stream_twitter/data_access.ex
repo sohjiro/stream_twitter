@@ -6,7 +6,7 @@ defmodule StreamTwitter.DataAccess do
   end
 
   def init(_args) do
-    {:ok, IO.inspect(:ets.new(__MODULE__, [:bag, :protected]))}
+    {:ok, :ets.new(__MODULE__, [:bag, :protected])}
   end
 
   def create(table_name, data) do

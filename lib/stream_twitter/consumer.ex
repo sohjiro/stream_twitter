@@ -5,10 +5,12 @@ defmodule StreamTwitter.Consumer do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
-  def search(name, text), do: GenServer.cast(__MODULE__, {:search, name, text})
+  def search(text) do
+    GenServer.cast(__MODULE__, {:search, text}) do
+  end
 
-  def handle_cast({:search, name, text}, state) do
-    Task.Supervisor.start_child(StreamTwitter.TaskSupervisor,
+  def handle_cast({:search, text}, state) do
+    Task.Supervisor.start_child(StreamTwitter.Streamer.Supervisor,
                                 StreamTwitter.Pool.Streamer,
                                 :stream,
                                 [text])
