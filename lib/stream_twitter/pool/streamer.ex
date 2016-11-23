@@ -6,7 +6,7 @@ defmodule StreamTwitter.Pool.Streamer do
   end
 
   def init(text) do
-    spawn_monitor(fn ->
+    spawn_link(fn ->
       stream = ExTwitter.stream_filter(track: text)
       for tweet <- stream, do: StreamTwitter.DataAccess.create(text, {tweet.text, tweet.created_at})
     end)
