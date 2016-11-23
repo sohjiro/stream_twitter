@@ -5,7 +5,7 @@ defmodule StreamTwitter do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(StreamTwitter.Consumer, []),
+      worker(StreamTwitter.App, []),
       worker(StreamTwitter.DataAccess, []),
       supervisor(StreamTwitter.Pool.Supervisor, [])
     ]

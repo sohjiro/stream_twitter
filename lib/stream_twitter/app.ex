@@ -1,4 +1,4 @@
-defmodule StreamTwitter.Consumer do
+defmodule StreamTwitter.App do
   use GenServer
 
   def start_link do
